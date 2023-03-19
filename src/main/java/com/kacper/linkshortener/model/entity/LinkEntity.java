@@ -21,14 +21,14 @@ public class LinkEntity {
     private String redirectLink;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDateTime expirationDate;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LinkEntity that = (LinkEntity) o;
-        return id == that.id && Objects.equals(originalLink, that.originalLink) && Objects.equals(redirectLink, that.redirectLink) && Objects.equals(date, that.date);
+        return id == that.id && Objects.equals(originalLink, that.originalLink) && Objects.equals(redirectLink, that.redirectLink) && Objects.equals(expirationDate, that.expirationDate);
     }
 
     @Override

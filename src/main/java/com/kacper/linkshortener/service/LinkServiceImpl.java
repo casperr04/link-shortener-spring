@@ -42,10 +42,9 @@ public class LinkServiceImpl implements LinkService {
 
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime expirationTime = currentTime.plusDays(5);
-        linkEntity.setDate(expirationTime);
+        linkEntity.setExpirationDate(expirationTime);
 
         linkRepository.save(linkEntity);
-
         return new LinkResponse(generatedUrl, expirationTime);
     }
 }
