@@ -1,16 +1,18 @@
 package com.kacper.linkshortener.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
-import java.util.Date;
-
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@Entity(name = "links")
 public class LinkEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(nullable = false)
     private String originalLink;
@@ -19,6 +21,18 @@ public class LinkEntity {
     private String redirectLink;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDateTime date;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LinkEntity that = (LinkEntity) o;
+        return id == that.id && Objects.equals(originalLink, that.originalLink) && Objects.equals(redirectLink, that.redirectLink) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
