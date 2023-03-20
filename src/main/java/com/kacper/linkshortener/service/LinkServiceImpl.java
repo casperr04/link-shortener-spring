@@ -30,7 +30,7 @@ public class LinkServiceImpl implements LinkService {
 
     /**
      * Handles validation and creation of a redirect link.
-     * Expires after 5 days.
+     * Expires after length defined in constants (default is 5 days).
      * @param link String of the link
      * @return LinkCreationResponse Model with the newly created URL link ID.
      * @throws RuntimeException if link is empty.
@@ -45,6 +45,7 @@ public class LinkServiceImpl implements LinkService {
         LinkEntity linkEntity = new LinkEntity();
 
         String generatedUrl = recursiveUniqueLinkValidator(linkUrlGenerator.generateRandomID(6));
+
         // Adds prefix and suffix to prevent Controller calling method for empty path.
         String preparedLink = linkConstants.getCONTROLLER_PREFIX()
                 + generatedUrl
@@ -54,13 +55,22 @@ public class LinkServiceImpl implements LinkService {
         linkEntity.setRedirectLink(generatedUrl);
 
         LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime expirationTime = currentTime.plusDays(5);
+        LocalDateTime expirationTime = currentTime.plusDays(linkConstants.getENTITY_EXPIRATION_DAYS());
         Timestamp timestamp = Timestamp.valueOf(expirationTime);
         linkEntity.setExpirationDate(timestamp.getTime());
 
         linkRepository.save(linkEntity);
+
+        //Prepared link includes prefix, store generatedUrl by itself.
         return new LinkCreationResponse(preparedLink, expirationTime);
     }
+
+    /**
+     * Retrieves the original link from a redirect ID.
+     * @param link Redirect ID link.
+     * @return Original link
+     * @throws RuntimeException If link is null or blank
+     */
 
     @Override
     public LinkRedirectResponse retrieveLink(String link) throws RuntimeException{
