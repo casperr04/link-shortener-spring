@@ -2,7 +2,6 @@ package com.kacper.linkshortener.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -21,7 +20,7 @@ public class LinkEntity {
     private String redirectLink;
 
     @Column(nullable = false)
-    private LocalDateTime expirationDate;
+    private long expirationDate;
 
     @Override
     public boolean equals(Object o) {
