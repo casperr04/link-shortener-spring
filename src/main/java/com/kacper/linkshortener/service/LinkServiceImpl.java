@@ -7,6 +7,8 @@ import com.kacper.linkshortener.utils.LinkUrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 
@@ -39,19 +41,33 @@ public class LinkServiceImpl implements LinkService {
 
         LinkEntity linkEntity = new LinkEntity();
 
-        String generatedUrl = "";
-        while(linkRepository.findByRedirectLink(generatedUrl) != null){
-            generatedUrl = linkUrlGenerator.generateRandomID(6);
-        }
+        String generatedUrl = recursiveUniqueLinkValidator(linkUrlGenerator.generateRandomID(6));
 
         linkEntity.setOriginalLink(link);
         linkEntity.setRedirectLink(generatedUrl);
 
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime expirationTime = currentTime.plusDays(5);
-        linkEntity.setExpirationDate(expirationTime);
+        Timestamp timestamp = Timestamp.valueOf(expirationTime);
+        linkEntity.setExpirationDate(timestamp.getTime());
 
         linkRepository.save(linkEntity);
         return new LinkResponse(generatedUrl, expirationTime);
+    }
+
+    /**
+     * Checks if given redirect link ID is unique.
+     * Returns a different unique redirect link ID if a collision is found.
+     * @param link Link ID to validate
+     * @return An unique redirect link ID.
+     */
+    private String recursiveUniqueLinkValidator(String link)
+    {
+        if (linkRepository.findByRedirectLink(link) != null){
+            return recursiveUniqueLinkValidator(linkUrlGenerator.generateRandomID(link.length()));
+        }
+        else{
+            return link;
+        }
     }
 }
