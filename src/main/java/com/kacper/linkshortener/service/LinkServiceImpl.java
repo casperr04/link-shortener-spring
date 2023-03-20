@@ -1,5 +1,6 @@
 package com.kacper.linkshortener.service;
 
+import com.kacper.linkshortener.constants.LinkConstants;
 import com.kacper.linkshortener.model.entity.LinkEntity;
 import com.kacper.linkshortener.model.response.LinkCreationResponse;
 import com.kacper.linkshortener.model.response.LinkRedirectResponse;
@@ -15,14 +16,15 @@ import java.time.LocalDateTime;
 
 @Service
 public class LinkServiceImpl implements LinkService {
-
+    private final LinkConstants linkConstants;
     private final LinkUrlGenerator linkUrlGenerator;
     private final LinkRepository linkRepository;
 
     @Autowired
-    public LinkServiceImpl(LinkUrlGenerator linkUrlGenerator, LinkRepository linkRepository) {
+    public LinkServiceImpl(LinkUrlGenerator linkUrlGenerator, LinkRepository linkRepository, LinkConstants linkConstants) {
         this.linkUrlGenerator = linkUrlGenerator;
         this.linkRepository = linkRepository;
+        this.linkConstants = linkConstants;
     }
 
 
@@ -43,6 +45,10 @@ public class LinkServiceImpl implements LinkService {
         LinkEntity linkEntity = new LinkEntity();
 
         String generatedUrl = recursiveUniqueLinkValidator(linkUrlGenerator.generateRandomID(6));
+        // Adds prefix and suffix to prevent Controller calling method for empty path.
+        String preparedLink = linkConstants.getCONTROLLER_PREFIX()
+                + generatedUrl
+                + linkConstants.getCONTROLLER_SUFFIX();
 
         linkEntity.setOriginalLink(link);
         linkEntity.setRedirectLink(generatedUrl);
@@ -53,7 +59,7 @@ public class LinkServiceImpl implements LinkService {
         linkEntity.setExpirationDate(timestamp.getTime());
 
         linkRepository.save(linkEntity);
-        return new LinkCreationResponse(generatedUrl, expirationTime);
+        return new LinkCreationResponse(preparedLink, expirationTime);
     }
 
     @Override
@@ -61,6 +67,7 @@ public class LinkServiceImpl implements LinkService {
         if(link == null || link.isBlank()){
             throw new RuntimeException("Link not provided.");
         }
+
         LinkEntity linkEntity = linkRepository.findByRedirectLink(link);
         return new LinkRedirectResponse(linkEntity.getOriginalLink());
     }

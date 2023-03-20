@@ -3,10 +3,10 @@ package com.kacper.linkshortener.controller;
 
 import com.kacper.linkshortener.model.request.LinkRequestModel;
 import com.kacper.linkshortener.model.response.LinkCreationResponse;
-import com.kacper.linkshortener.model.response.LinkRedirectResponse;
 import com.kacper.linkshortener.service.LinkService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @AllArgsConstructor
 @RestController
@@ -23,8 +23,10 @@ public class LinkController {
         return linkService.createShortenedLink(linkRequestModel.getLink());
     }
 
-    @GetMapping(path = "/{id}")
-    public LinkRedirectResponse retrieveRedirectLinkId(@PathVariable String id) {
-        return linkService.retrieveLink((id));
+    @GetMapping(path = "/li{id}k")
+    public RedirectView retrieveRedirectLinkId(@PathVariable String id) {
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl(linkService.retrieveLink(id).getRedirectLink());
+        return redirectView;
     }
 }
