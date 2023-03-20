@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class LinkController {
     private final LinkService linkService;
 
+
+    /**
+     * Endpoint for creating redirect URL links.
+     * @return LinkResponse consisting of a new URL redirect ID and expiration date.
+     */
     @PostMapping(path = "/link")
     public LinkResponse createShortenedLink(@RequestBody LinkRequestModel linkRequestModel){
         return linkService.createShortenedLink(linkRequestModel.getLink());

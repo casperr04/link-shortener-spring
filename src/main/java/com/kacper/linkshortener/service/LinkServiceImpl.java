@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class LinkServiceImpl implements LinkService {
 
     private final LinkUrlGenerator linkUrlGenerator;
-
     private final LinkRepository linkRepository;
 
     @Autowired
@@ -23,6 +22,14 @@ public class LinkServiceImpl implements LinkService {
         this.linkRepository = linkRepository;
     }
 
+
+    /**
+     * Handles validation and creation of a redirect link.
+     * Expires after 5 days.
+     * @param link String of the link
+     * @return LinkResponse Model with the newly created URL link ID.
+     * @throws RuntimeException if link is empty.
+     */
     @Override
     public LinkResponse createShortenedLink(String link) throws RuntimeException{
 
