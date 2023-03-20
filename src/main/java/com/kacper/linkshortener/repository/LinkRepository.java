@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LinkRepository extends JpaRepository <LinkEntity, Long> {
-    LinkRepository findByRedirectLink(String redirectLink);
+    LinkEntity findByRedirectLink(String redirectLink);
 
 }

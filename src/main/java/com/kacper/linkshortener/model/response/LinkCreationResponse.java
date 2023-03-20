@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LinkResponse {
+public class LinkCreationResponse {
     private String link;
     private LocalDateTime expirationDate;
 }

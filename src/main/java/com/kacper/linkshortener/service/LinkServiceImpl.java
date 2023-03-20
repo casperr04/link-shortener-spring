@@ -1,7 +1,8 @@
 package com.kacper.linkshortener.service;
 
 import com.kacper.linkshortener.model.entity.LinkEntity;
-import com.kacper.linkshortener.model.response.LinkResponse;
+import com.kacper.linkshortener.model.response.LinkCreationResponse;
+import com.kacper.linkshortener.model.response.LinkRedirectResponse;
 import com.kacper.linkshortener.repository.LinkRepository;
 import com.kacper.linkshortener.utils.LinkUrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,11 @@ public class LinkServiceImpl implements LinkService {
      * Handles validation and creation of a redirect link.
      * Expires after 5 days.
      * @param link String of the link
-     * @return LinkResponse Model with the newly created URL link ID.
+     * @return LinkCreationResponse Model with the newly created URL link ID.
      * @throws RuntimeException if link is empty.
      */
     @Override
-    public LinkResponse createShortenedLink(String link) throws RuntimeException{
+    public LinkCreationResponse createShortenedLink(String link) throws RuntimeException{
 
         if(link == null || link.isBlank()){
             throw new RuntimeException("Link not provided.");
@@ -52,8 +53,18 @@ public class LinkServiceImpl implements LinkService {
         linkEntity.setExpirationDate(timestamp.getTime());
 
         linkRepository.save(linkEntity);
-        return new LinkResponse(generatedUrl, expirationTime);
+        return new LinkCreationResponse(generatedUrl, expirationTime);
     }
+
+    @Override
+    public LinkRedirectResponse retrieveLink(String link) throws RuntimeException{
+        if(link == null || link.isBlank()){
+            throw new RuntimeException("Link not provided.");
+        }
+        LinkEntity linkEntity = linkRepository.findByRedirectLink(link);
+        return new LinkRedirectResponse(linkEntity.getOriginalLink());
+    }
+
 
     /**
      * Checks if given redirect link ID is unique.
