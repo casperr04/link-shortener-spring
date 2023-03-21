@@ -29,6 +29,7 @@ public class LinkServiceImpl implements LinkService {
 
 
     /**
+     * @TODO Verify the link is an actual link
      * Handles validation and creation of a redirect link.
      * Expires after length defined in constants (default is 5 days).
      * @param link String of the link
@@ -79,6 +80,8 @@ public class LinkServiceImpl implements LinkService {
         }
 
         LinkEntity linkEntity = linkRepository.findByRedirectLink(link);
+        if (linkEntity == null){throw new RuntimeException("Link not found");}
+
         return new LinkRedirectResponse(linkEntity.getOriginalLink());
     }
 
