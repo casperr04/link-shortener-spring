@@ -29,12 +29,7 @@ public class LinkServiceImpl implements LinkService {
 
 
     /**
-     * @TODO Verify the link is an actual link
-     * Handles validation and creation of a redirect link.
-     * Expires after length defined in constants (default is 5 days).
-     * @param link String of the link
-     * @return LinkCreationResponse Model with the newly created URL link ID.
-     * @throws RuntimeException if link is empty.
+     * {@inheritDoc}
      */
     @Override
     public LinkCreationResponse createShortenedLink(String link) throws RuntimeException{
@@ -67,12 +62,8 @@ public class LinkServiceImpl implements LinkService {
     }
 
     /**
-     * Retrieves the original link from a redirect ID.
-     * @param link Redirect ID link.
-     * @return Original link
-     * @throws RuntimeException If link is null or blank
+     * {@inheritDoc}
      */
-
     @Override
     public LinkRedirectResponse retrieveLink(String link) throws RuntimeException{
         if(link == null || link.isBlank()){throw new RuntimeException("Link not provided.");}
@@ -85,10 +76,7 @@ public class LinkServiceImpl implements LinkService {
 
 
     /**
-     * Checks if given redirect link ID is unique.
-     * Returns a different unique redirect link ID if a collision is found.
-     * @param link Link ID to validate
-     * @return An unique redirect link ID.
+     * {@inheritDoc}
      */
     private String recursiveUniqueLinkValidator(String link)
     {
