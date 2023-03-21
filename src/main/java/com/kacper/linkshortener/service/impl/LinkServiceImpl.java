@@ -1,11 +1,11 @@
-package com.kacper.linkshortener.service;
+package com.kacper.linkshortener.service.impl;
 
 import com.kacper.linkshortener.constants.LinkConstants;
 import com.kacper.linkshortener.model.entity.LinkEntity;
 import com.kacper.linkshortener.model.response.LinkCreationResponse;
 import com.kacper.linkshortener.model.response.LinkRedirectResponse;
 import com.kacper.linkshortener.repository.LinkRepository;
-import com.kacper.linkshortener.utils.LinkUrlGenerator;
+import com.kacper.linkshortener.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +17,12 @@ import java.time.LocalDateTime;
 @Service
 public class LinkServiceImpl implements LinkService {
     private final LinkConstants linkConstants;
-    private final LinkUrlGenerator linkUrlGenerator;
+    private final LinkUrlGeneratorImpl linkUrlGeneratorImpl;
     private final LinkRepository linkRepository;
 
     @Autowired
-    public LinkServiceImpl(LinkUrlGenerator linkUrlGenerator, LinkRepository linkRepository, LinkConstants linkConstants) {
-        this.linkUrlGenerator = linkUrlGenerator;
+    public LinkServiceImpl(LinkUrlGeneratorImpl linkUrlGeneratorImpl, LinkRepository linkRepository, LinkConstants linkConstants) {
+        this.linkUrlGeneratorImpl = linkUrlGeneratorImpl;
         this.linkRepository = linkRepository;
         this.linkConstants = linkConstants;
     }
@@ -40,7 +40,7 @@ public class LinkServiceImpl implements LinkService {
 
         LinkEntity linkEntity = new LinkEntity();
 
-        String generatedUrl = recursiveUniqueLinkValidator(linkUrlGenerator.generateRandomID(6));
+        String generatedUrl = recursiveUniqueLinkValidator(linkUrlGeneratorImpl.generateRandomID(6));
 
         // Adds prefix and suffix to prevent Controller calling method for empty path.
         String preparedLink = linkConstants.getCONTROLLER_PREFIX()
@@ -81,7 +81,7 @@ public class LinkServiceImpl implements LinkService {
     private String recursiveUniqueLinkValidator(String link)
     {
         if (linkRepository.findByRedirectLink(link) != null){
-            return recursiveUniqueLinkValidator(linkUrlGenerator.generateRandomID(link.length()));
+            return recursiveUniqueLinkValidator(linkUrlGeneratorImpl.generateRandomID(link.length()));
         }
         else{return link;}
     }
