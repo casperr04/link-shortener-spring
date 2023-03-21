@@ -75,9 +75,7 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public LinkRedirectResponse retrieveLink(String link) throws RuntimeException{
-        if(link == null || link.isBlank()){
-            throw new RuntimeException("Link not provided.");
-        }
+        if(link == null || link.isBlank()){throw new RuntimeException("Link not provided.");}
 
         LinkEntity linkEntity = linkRepository.findByRedirectLink(link);
         if (linkEntity == null){throw new RuntimeException("Link not found");}
@@ -97,8 +95,6 @@ public class LinkServiceImpl implements LinkService {
         if (linkRepository.findByRedirectLink(link) != null){
             return recursiveUniqueLinkValidator(linkUrlGenerator.generateRandomID(link.length()));
         }
-        else{
-            return link;
-        }
+        else{return link;}
     }
 }
