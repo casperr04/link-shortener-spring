@@ -24,8 +24,13 @@ public class LinkController {
      * @return LinkCreationResponse consisting of a new URL redirect ID and expiration date.
      */
     @PostMapping(path = "/link")
-    public ResponseEntity<?> createShortenedLink(@RequestBody LinkRequestModel linkRequestModel){
-        LinkCreationResponse linkCreationResponse = linkService.createShortenedLink(linkRequestModel.getLink());
+    public ResponseEntity<?> createShortenedLink(@RequestBody LinkRequestModel linkRequestModel) {
+        LinkCreationResponse linkCreationResponse;
+        try {
+            linkCreationResponse = linkService.createShortenedLink(linkRequestModel.getLink());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(linkCreationResponse);
     }
 
@@ -35,7 +40,6 @@ public class LinkController {
         try {
             httpHeaders.add("Location", linkService.retrieveLink(id).getRedirectLink());
         } catch (RuntimeException runtimeException) {
-
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ExceptionResponseModel(runtimeException.getMessage(), LocalDateTime.now()));
         }
