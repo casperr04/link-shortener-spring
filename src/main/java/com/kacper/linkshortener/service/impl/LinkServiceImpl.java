@@ -8,6 +8,9 @@ import com.kacper.linkshortener.repository.LinkRepository;
 import com.kacper.linkshortener.service.LinkService;
 import com.kacper.linkshortener.service.LinkValidator;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
@@ -15,7 +18,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 
-@Service
+@Service("linkService")
 @AllArgsConstructor
 public class LinkServiceImpl implements LinkService {
     private final LinkConstants linkConstants;
@@ -72,5 +75,19 @@ public class LinkServiceImpl implements LinkService {
         if (linkEntity == null){throw new RuntimeException("Link not found");}
 
         return new LinkRedirectResponse(linkEntity.getOriginalLink());
+    }
+
+    /**
+     * Removes expired links from the database.
+     */
+    @Scheduled(cron = "0 0/30 * * * ?")
+    private void removeExpiredLinks() {
+        Logger logger = LoggerFactory.getLogger(LinkService.class);
+        LocalDateTime currentTime = LocalDateTime.now();
+        Timestamp timestamp = Timestamp.valueOf(currentTime);
+        int removalCount = linkRepository.countAllByExpirationDateIsLessThan(timestamp.getTime());
+        linkRepository.removeAllByExpirationDateIsLessThan(timestamp.getTime());
+        logger.info("--SCHEDULED EXPIRED LINK REMOVAL--");
+        logger.info("Removed " + removalCount + " expired links from database.");
     }
 }
