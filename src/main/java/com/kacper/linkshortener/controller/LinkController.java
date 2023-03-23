@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class LinkController {
     private final LinkService linkService;
 
-
     /**
      * Endpoint for creating redirect URL links.
      * @return LinkCreationResponse consisting of a new URL redirect ID and expiration date.
@@ -29,11 +28,16 @@ public class LinkController {
         try {
             linkCreationResponse = linkService.createShortenedLink(linkRequestModel.getLink());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponseModel(e.getMessage(), LocalDateTime.now()));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(linkCreationResponse);
     }
 
+    /**
+     * Endpoint for retrieving the original link
+     * @param id Redirect ID
+     * @return Redirect to specified original URL
+     */
     @GetMapping(path = "/li{id}k")
     public ResponseEntity<?> retrieveRedirectLinkId(@PathVariable String id) {
         HttpHeaders httpHeaders = new HttpHeaders();
