@@ -28,7 +28,8 @@ public class LinkController {
         try {
             linkCreationResponse = linkService.createShortenedLink(linkRequestModel.getLink());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponseModel(e.getMessage(), LocalDateTime.now()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ExceptionResponseModel(e.getMessage(), LocalDateTime.now()));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(linkCreationResponse);
     }
