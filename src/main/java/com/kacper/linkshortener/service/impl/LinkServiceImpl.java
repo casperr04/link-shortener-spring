@@ -6,6 +6,7 @@ import com.kacper.linkshortener.model.response.LinkCreationResponse;
 import com.kacper.linkshortener.model.response.LinkRedirectResponse;
 import com.kacper.linkshortener.repository.LinkRepository;
 import com.kacper.linkshortener.service.LinkService;
+import com.kacper.linkshortener.service.LinkUrlGenerator;
 import com.kacper.linkshortener.service.LinkValidator;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class LinkServiceImpl implements LinkService {
     private final LinkConstants linkConstants;
-    private final LinkUrlGeneratorImpl linkUrlGeneratorImpl;
+    private final LinkUrlGenerator linkUrlGenerator;
     private final LinkRepository linkRepository;
     private final LinkValidator linkValidator;
 
@@ -43,7 +44,7 @@ public class LinkServiceImpl implements LinkService {
 
         LinkEntity linkEntity = new LinkEntity();
 
-        String generatedUrl = linkValidator.uniqueLinkIDValidator(linkUrlGeneratorImpl.generateRandomID(6));
+        String generatedUrl = linkValidator.uniqueLinkIDValidator(linkUrlGenerator.generateRandomID(6));
 
         // Adds prefix and suffix to prevent Controller calling method for empty path.
         String preparedLink = linkConstants.getCONTROLLER_PREFIX()
