@@ -35,7 +35,7 @@ public class LinkServiceImpl implements LinkService {
         if(link == null || link.isBlank()){
             throw new RuntimeException("Link not provided.");
         }
-        if (!link.startsWith("https://") || !link.startsWith("http://")){
+        if (!link.startsWith("https://") && !link.startsWith("http://")){
             link = "https://" + link;
         }
         if (!linkValidator.validateLink(link)) {
@@ -61,7 +61,7 @@ public class LinkServiceImpl implements LinkService {
 
         linkRepository.save(linkEntity);
 
-        //Prepared link includes prefix, store generatedUrl by itself.
+        //Prepared link includes prefix and suffix, store generatedUrl by itself.
         return new LinkCreationResponse(preparedLink, expirationTime);
     }
 

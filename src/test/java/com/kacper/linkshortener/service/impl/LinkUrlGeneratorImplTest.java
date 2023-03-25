@@ -17,7 +17,6 @@ class LinkUrlGeneratorImplTest {
     @Autowired
     LinkUrlGeneratorImpl linkUrlGenerator;
 
-
     @Test
     void generateRandomID() {
         assertEquals(8, linkUrlGenerator.generateRandomID(8).length());
