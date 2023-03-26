@@ -55,7 +55,11 @@ public class LinkServiceImpl implements LinkService {
         linkEntity.setRedirectLink(generatedUrl);
 
         LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime expirationTime = currentTime.plusDays(linkConstants.getENTITY_EXPIRATION_DAYS());
+        LocalDateTime expirationTime = currentTime
+                .plusDays(linkConstants.getENTITY_EXPIRATION_DAYS())
+                .plusHours(linkConstants.getENTITY_EXPIRATION_HOURS())
+                .plusMinutes(linkConstants.getENTITY_EXPIRATION_MINUTES());
+
         Timestamp timestamp = Timestamp.valueOf(expirationTime);
         linkEntity.setExpirationDate(timestamp.getTime());
 
