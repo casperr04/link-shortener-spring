@@ -8,6 +8,7 @@ import com.kacper.linkshortener.repository.LinkRepository;
 import com.kacper.linkshortener.service.LinkService;
 import com.kacper.linkshortener.service.LinkUrlGenerator;
 import com.kacper.linkshortener.service.LinkValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class LinkServiceImpl implements LinkService {
      * {@inheritDoc}
      */
     @Override
-    public LinkCreationResponse createShortenedLink(String link) throws RuntimeException{
+    public LinkCreationResponse createShortenedLink(String link, HttpServletRequest request) throws RuntimeException{
         if(link == null || link.isBlank()){
             throw new RuntimeException("Link not provided.");
         }
@@ -46,8 +47,10 @@ public class LinkServiceImpl implements LinkService {
 
         String generatedUrl = linkValidator.uniqueLinkIDValidator(linkUrlGenerator.generateRandomID(6));
 
-        // Adds prefix and suffix to prevent Controller calling method for empty path.
-        String preparedLink = linkConstants.getCONTROLLER_PREFIX()
+        // Builds the redirect link that is returned to the user
+        String preparedLink = request.getHeader("Host")
+                + "/"
+                + linkConstants.getCONTROLLER_PREFIX()
                 + generatedUrl
                 + linkConstants.getCONTROLLER_SUFFIX();
 

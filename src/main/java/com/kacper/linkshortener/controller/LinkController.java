@@ -5,6 +5,7 @@ import com.kacper.linkshortener.model.request.LinkRequestModel;
 import com.kacper.linkshortener.model.response.ExceptionResponseModel;
 import com.kacper.linkshortener.model.response.LinkCreationResponse;
 import com.kacper.linkshortener.service.LinkService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,10 @@ public class LinkController {
      * @return LinkCreationResponse consisting of a new URL redirect ID and expiration date.
      */
     @PostMapping(path = "/link")
-    public ResponseEntity<?> createShortenedLink(@RequestBody LinkRequestModel linkRequestModel) {
+    public ResponseEntity<?> createShortenedLink(@RequestBody LinkRequestModel linkRequestModel, HttpServletRequest request) {
         LinkCreationResponse linkCreationResponse;
         try {
-            linkCreationResponse = linkService.createShortenedLink(linkRequestModel.getLink());
+            linkCreationResponse = linkService.createShortenedLink(linkRequestModel.getLink(), request);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ExceptionResponseModel(e.getMessage(), LocalDateTime.now()));
