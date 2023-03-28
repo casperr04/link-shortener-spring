@@ -88,7 +88,7 @@ public class LinkServiceImpl implements LinkService {
     /**
      * Removes expired links from the database.
      */
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "${cron_expiration_date}")
     private void removeExpiredLinks() {
         Logger logger = LoggerFactory.getLogger(LinkService.class);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
