@@ -7,6 +7,7 @@ import com.kacper.linkshortener.model.response.LinkRedirectResponse;
 import com.kacper.linkshortener.repository.LinkRepository;
 import com.kacper.linkshortener.service.LinkUrlGenerator;
 import com.kacper.linkshortener.service.LinkValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,13 +44,19 @@ class LinkServiceImplTest {
 
     @Test
     void createShortenedLink() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getHeader(anyString())).thenReturn("test.com");
+
         when(linkValidator.validateLink(anyString())).thenReturn(false);
-        assertThrows(RuntimeException.class, () -> linkService.createShortenedLink("string"));
+        assertThrows(RuntimeException.class, () -> linkService.createShortenedLink("string", request));
 
         when(linkValidator.validateLink(anyString())).thenReturn(true);
         when(linkValidator.uniqueLinkIDValidator(any())).thenReturn("ABC123");
-        LinkCreationResponse linkCreationResponse = linkService.createShortenedLink("myLink");
-        assertEquals(linkCreationResponse.getLink(), linkConstants.getCONTROLLER_PREFIX() + "ABC123" + linkConstants.getCONTROLLER_SUFFIX());
+        LinkCreationResponse linkCreationResponse = linkService.createShortenedLink("myLink", request);
+        assertEquals(linkCreationResponse.getLink(), "test.com/"
+                + linkConstants.getCONTROLLER_PREFIX()
+                + "ABC123"
+                + linkConstants.getCONTROLLER_SUFFIX());
     }
 
     @Test
