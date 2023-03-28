@@ -31,22 +31,26 @@ class LinkValidatorImplTest {
     LinkConstants linkConstants = new LinkConstants();
 
     @Test
-    void validateLink() {
+    void ValidateLink_ValidLink_ReturnsTrue() {
         String validLink1 = "https://www.google.com";
         String validLink2 = "http://stackoverflow.com";
-        String invalidLink1 = "www.facebook.com";
-        String invalidLink2 = "invalidlink.com";
-        String invalidLink3 = "invalid";
 
         assertTrue(linkValidator.validateLink(validLink1));
         assertTrue(linkValidator.validateLink(validLink2));
+    }
+    @Test
+    void ValidateLink_InvalidLink_ReturnsFalse() {
+        String invalidLink1 = "www.facebook.com";
+        String invalidLink2 = "invalidlink.com";
+        String invalidLink3 = "invalid";
 
         assertFalse(linkValidator.validateLink(invalidLink1));
         assertFalse(linkValidator.validateLink(invalidLink2));
         assertFalse(linkValidator.validateLink(invalidLink3));
     }
+
     @Test
-    void uniqueLinkIDValidator(){
+    void UniqueIdLinkValidator_UniqueLink_ReturnsGivenLink(){
         when(linkRepository.findByRedirectLink(anyString())).thenReturn(null);
         assertEquals(linkValidator.uniqueLinkIDValidator("ABC123"), "ABC123");
     }

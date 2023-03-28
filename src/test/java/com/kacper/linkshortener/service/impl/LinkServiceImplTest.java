@@ -43,12 +43,17 @@ class LinkServiceImplTest {
 
 
     @Test
-    void createShortenedLink() {
+    void CreateShortenedLink_MalformedUrl_ThrowsException() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getHeader(anyString())).thenReturn("test.com");
-
         when(linkValidator.validateLink(anyString())).thenReturn(false);
         assertThrows(RuntimeException.class, () -> linkService.createShortenedLink("string", request));
+    }
+
+    @Test
+    void CreateShortenedLink_ValidLinkUrl_ReturnsValidRedirectLink(){
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getHeader(anyString())).thenReturn("test.com");
 
         when(linkValidator.validateLink(anyString())).thenReturn(true);
         when(linkValidator.uniqueLinkIDValidator(any())).thenReturn("ABC123");
@@ -60,16 +65,19 @@ class LinkServiceImplTest {
     }
 
     @Test
-    void retrieveLink() {
+    void RetrieveLink_InvalidLinkBody_ThrowsException() {
         assertThrows(RuntimeException.class, () -> linkService.retrieveLink(null));
         assertThrows(RuntimeException.class, () -> linkService.retrieveLink(""));
 
         when(linkRepository.findByRedirectLink(anyString())).thenReturn(null);
         assertThrows(RuntimeException.class, () -> linkService.retrieveLink("MyLink"));
-
+    }
+    @Test
+    void RetrieveLink_ValidLinkBody_ReturnsValidLink(){
         LinkEntity linkEntity = new LinkEntity();
         linkEntity.setRedirectLink("liABC123k");
         linkEntity.setOriginalLink("https://www.youtube.com");
+
         when(linkRepository.findByRedirectLink(anyString())).thenReturn(linkEntity);
         LinkRedirectResponse linkRedirectResponse = linkService.retrieveLink("liABC123k");
         assertEquals("https://www.youtube.com", linkRedirectResponse.getRedirectLink());

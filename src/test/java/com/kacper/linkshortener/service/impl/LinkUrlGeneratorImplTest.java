@@ -18,12 +18,12 @@ class LinkUrlGeneratorImplTest {
     LinkUrlGeneratorImpl linkUrlGenerator;
 
     @Test
-    void generateRandomID() {
+    void GenerateRandomId_IdLengthSameAsArgumentLength_ReturnsSameLength() {
         assertEquals(8, linkUrlGenerator.generateRandomID(8).length());
     }
 
     @Test
-    void generateRandomString() {
+    void GenerateRandomString_StringContainsValidCharacters_ReturnsTrue() {
         Pattern pattern = Pattern.compile("[ -~]");
         Matcher validIdTest = pattern.matcher(linkUrlGenerator.generateRandomString(8));
         assertEquals(8, linkUrlGenerator.generateRandomString(8).length());
