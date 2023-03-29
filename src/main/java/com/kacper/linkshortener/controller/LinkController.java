@@ -64,7 +64,7 @@ public class LinkController {
                     description = "Successfully found, redirects to original URL",
                     content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404",
-                    description = "not found",
+                    description = "Not found",
                     content = @Content(schema = @Schema(implementation = ExceptionResponseModel.class)))})
 
     @GetMapping(path = "/li{id}k",
