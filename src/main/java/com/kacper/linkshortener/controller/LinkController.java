@@ -9,9 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class LinkController {
      * Endpoint for creating redirect URL links.
      * @return LinkCreationResponse consisting of a new URL redirect ID and expiration date.
      */
-    @PostMapping(path = "/link")
+    @PostMapping(path = "/link", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_ATOM_XML_VALUE})
     public ResponseEntity<?> createShortenedLink(@RequestBody LinkRequestModel linkRequestModel, HttpServletRequest request) {
         LinkCreationResponse linkCreationResponse;
         try {
@@ -40,7 +40,7 @@ public class LinkController {
      * @param id Redirect ID
      * @return Redirect to specified original URL
      */
-    @GetMapping(path = "/li{id}k")
+    @GetMapping(path = "/li{id}k", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_ATOM_XML_VALUE})
     public ResponseEntity<?> retrieveRedirectLinkId(@PathVariable String id) {
         HttpHeaders httpHeaders = new HttpHeaders();
         try {
