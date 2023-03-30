@@ -1,0 +1,154 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/link": {
+      "post": {
+        "tags": [
+          "link-controller"
+        ],
+        "summary": "Create redirect link",
+        "description": "Creates a redirect link for the original link passed in the body.",
+        "operationId": "createShortenedLink",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkRequestModel"
+              }
+            },
+            "application/atom+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkRequestModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created, returns redirect URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkCreationResponse"
+                }
+              },
+              "application/atom+xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionResponseModel"
+                }
+              },
+              "application/atom+xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionResponseModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/li{id}k": {
+      "get": {
+        "tags": [
+          "link-controller"
+        ],
+        "summary": "Redirect to original URL",
+        "description": "Redirects to the original link from a created redirect link. Uses ID from the returned url (/l{id}nk)",
+        "operationId": "retrieveRedirectLinkId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Successfully found, redirects to original URL"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionResponseModel"
+                }
+              },
+              "application/atom+xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionResponseModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LinkRequestModel": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string",
+            "description": "Link to be shortened",
+            "format": "string",
+            "example": "www.youtube.com"
+          }
+        }
+      },
+      "ExceptionResponseModel": {
+        "type": "object",
+        "properties": {
+          "error message": {
+            "type": "string",
+            "description": "Error message",
+            "format": "string",
+            "example": "Link not found"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "LinkCreationResponse": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
