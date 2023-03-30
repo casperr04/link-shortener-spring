@@ -16,7 +16,7 @@ By default, documentation on the endpoints will be available on /swagger-ui/inde
 * You can disable this in application properties with ```springdoc.swagger-ui.enabled=false```
 
 You can also see documentation on this page:
-https://mikrel071204.github.io/link-shortener-spring/index.html
+https://casperr04.github.io/link-shortener-spring/index.html
 
 ## Getting Started
 Link shortener is a Spring Boot application built using Maven.
