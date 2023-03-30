@@ -13,6 +13,8 @@ Other - Project Lombok, Springdoc, Jackson
 
 ## Documentation
 By default, documentation on the endpoints will be available on /swagger-ui/index.html.
+* You can disable this in application properties with ```springdoc.swagger-ui.enabled=false```
+
 You can also see documentation on this page:
 https://mikrel071204.github.io/link-shortener-spring/index.html
 
@@ -48,9 +50,6 @@ java -jar link-shortener-1.0.0.jar
 ```
 
 ## Endpoints
-By default, documentation on the endpoints will be available on /swagger-ui/index.html.
-* You can disable this in application properties with ```springdoc.swagger-ui.enabled=false```
-
 The API is pretty simple, with two endpoints. The first one will let you create a redirect URL, given an original link, on ```/link``` 
 ```
 {
