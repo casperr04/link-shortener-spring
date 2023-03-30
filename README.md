@@ -11,6 +11,10 @@ Testing - JUnit 5, Mockito
 
 Other - Project Lombok, Springdoc, Jackson
 
+## Documentation
+By default, documentation on the endpoints will be available on /swagger-ui/index.html.
+You can also see documentation on this page:
+https://mikrel071204.github.io/link-shortener-spring/index.html
 
 ## Getting Started
 Link shortener is a Spring Boot application built using Maven.
@@ -45,7 +49,7 @@ java -jar link-shortener-1.0.0.jar
 
 ## Endpoints
 By default, documentation on the endpoints will be available on /swagger-ui/index.html.
-* You can disable this in application properties with ``` springdoc.swagger-ui.enabled=false```
+* You can disable this in application properties with ```springdoc.swagger-ui.enabled=false```
 
 The API is pretty simple, with two endpoints. The first one will let you create a redirect URL, given an original link, on ```/link``` 
 ```
@@ -85,7 +89,7 @@ cron_expiration_date=0 0/30 * * * ?
 To run tests, run the following command
 
 ```
-  mvnw test
+mvnw test
 ```
 
 
