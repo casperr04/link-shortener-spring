@@ -3,6 +3,8 @@ Link shortener API, created with Spring Boot. Features entity expiration removal
 
 
 ## Technologies used
+Java 17
+
 Backend - Spring Boot
 
 Database - PostgreSQL
@@ -37,6 +39,8 @@ spring.datasource.password=[YOUR PASSWORD]
 
 * You can also create a seperate application.properties file and set those fields with the packaged jar.
 
+You also need the Java 17 SDK. 
+https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html
 
 ## Running the API
 You can run the application directly with
